@@ -1,6 +1,8 @@
 
 int ledpoort1 = 2;
 int knopjepoort2 = 3;
+unsigned long timestamp;
+int delaytime = 3;
 
 
 void setup() {
@@ -13,16 +15,23 @@ pinMode(knopjepoort2, INPUT);
 void loop() {
   // put your main code here, to run repeatedly:
 
-if (digitalRead(knopjepoort2) ==HIGH) {
-  Serial.println("hoi");
-}
-for(int i=1;i<6;i++){
+  if (digitalRead(knopjepoort2) ==HIGH) {
+    Serial.println(random(1, 6));
+  }
 
-digitalWrite(ledpoort1, HIGH);
-Serial.println(i*1000);
-delay(i*1000);
-digitalWrite(ledpoort1, LOW);
-delay(i*1000);
-}
+
+  if(timestamp==0 ||(((millis()-timestamp)>(delaytime*1000)) && ((millis()-timestamp)<(delaytime*1000 *2))))  {
+    digitalWrite(ledpoort1, HIGH);
+  }
+ 
+  if ((millis()-timestamp)>(delaytime*1000*2)){
+    digitalWrite(ledpoort1, LOW);
+     
+    Serial.println(delaytime*1000*2);
+    timestamp = millis();
+  }
+  
+
+
 }
 
