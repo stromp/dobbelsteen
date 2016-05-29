@@ -20,7 +20,7 @@ int ledState = LOW;         // the current state of the output pin
 int buttonState;             // the current reading from the input pin
 int lastButtonState = LOW;   // the previous reading from the input pin
 long lastDebounceTime = 0;  // the last time the output pin was toggled
-long debounceDelay = 50;    // the debounce time; increase if the output flickers
+long debounceDelay = 100;    // the debounce time; increase if the output flickers
 int randomgetal;
 
 
@@ -62,13 +62,33 @@ void loop() {
 
       // only toggle the LED if the new button state is HIGH
       if (buttonState == HIGH) {
-        randomgetal = random(1,7);
+        generateNumber();
       }
     }
   }
-      
-      if(buttonState == LOW) {
-        switch (randomgetal) {
+    // save the reading.  Next time through the loop,
+  // it'll be the lastButtonState:
+  lastButtonState = reading;
+}
+
+void generateNumber() {
+  for(int counter = 0; counter <15; counter++) {
+    displayNumber (random(1,7));
+    delay (100);
+  }
+  int final_number(random(1,7));
+  for (int counter = 0; counter <5;counter++) {
+    displayNumber(final_number);
+    delay (400);
+    clearallpins();
+    delay(400);
+    displayNumber(final_number);
+  }
+}
+
+void displayNumber (int getal) {
+   Serial.println(getal);
+        switch (getal) {
   case 1:   digitalWrite(ledpoort1, LOW);
             digitalWrite(ledpoort2, LOW);
             digitalWrite(ledpoort3, LOW);
@@ -107,20 +127,17 @@ void loop() {
             digitalWrite(ledpoort3, HIGH);
             digitalWrite(ledpoort4, HIGH);
     break;
-      }
-      }
       
+    }
+}      
 
-  // save the reading.  Next time through the loop,
-  // it'll be the lastButtonState:
-  lastButtonState = reading;
+
       
       
      
-}
 
 void clearallpins () {
-  digitalWrite(ledpoort1, ledState);
+  digitalWrite(ledpoort1, LOW);
   digitalWrite(ledpoort2, LOW);
   digitalWrite(ledpoort3, LOW);  
   digitalWrite(ledpoort4, LOW);  
